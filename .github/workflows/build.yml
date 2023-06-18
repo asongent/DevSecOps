@@ -20,12 +20,6 @@ jobs:
         uses: actions/checkout@master
         with:
           fetch-depth: 0
-
-      #     ref: ${{ github.head_ref }} #necessary for pull request workflow trigger
-      # - name: trufflehog-actions-scan
-      #   uses: edplato/trufflehog-actions-scan@master
-      #   with:
-      #     scanArguments: "--regex --entropy=False --max_depth=5 --rules /regexes.json"
           
         ##DAST
       - name: SonarQube Scan
@@ -33,38 +27,23 @@ jobs:
         with:
           host: ${{ secrets.SONARQUBE_HOST }}
           login: ${{ secrets.SONARQUBE_TOKEN }}
-          projectKey: devsecops #${{ secrets.SONAR_PROJECT_KEY }} 
+          projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
 
         ## Set up qulity Gate
-      - name: SonarQube Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        # Force to fail step after specific time.
-        timeout-minutes: 5
-        env:
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
-  
-      # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
-      - name: "Example show SonarQube Quality Gate Status value"
-        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-      
-        # - name: Wait for the quality gate result
-      #   run: sleep 5
-
-      # - uses:  sonarsource/sonarqube-quality-gate-action@master
-      #   id: quality-gate-check
+      # - name: SonarQube Quality Gate check
+      #   id: sonarqube-quality-gate-check
+      #   uses: sonarsource/sonarqube-quality-gate-action@master
+      #   # Force to fail step after specific time.
       #   timeout-minutes: 5
-      #   with:
-      #     sonar-project-key: ${{ secrets.SONAR_PROJECT_KEY }}
-      #     sonar-host-url: ${{ secrets.SONAR_HOST_URL }}
-      #     sonar-token: ${{ secrets.SONAR_TOKEN }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #   env:
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
+  
+      # # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
+      # - name: "Example show SonarQube Quality Gate Status value"
+      #   run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
-      - name: Output result
-        run: |
-          echo "The Project status is ${{ steps.quality-gate-check.outputs.project-status }}"
-          echo "The Quality Gate status is ${{ steps.quality-gate-check.outputs.quality-gate-result }}"
+  
 
       ## Evaluate Dockerfile for poper set-up
       
