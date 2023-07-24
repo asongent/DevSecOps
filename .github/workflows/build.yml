@@ -72,9 +72,7 @@ jobs:
         with:
           push: false
           context: .
-          tags:  eproject/DevSecOps:${{ steps.versioning.outputs.version }}
-          #tags: ${{ secrets.PRIVATE }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }} #Private registry
-          #tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }} #Public Docker registry
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }} 
           #tags: ${{ env.env_var }}:lastest,${{ env.env_var }}:${{ steps.versioning.outputs.version }}
       
       ##SAST
@@ -82,11 +80,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: eproject/DevSecOps:${{ steps.versioning.outputs.version }} 
-          #image-ref:  ${{ secrets.PRIVATE }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
-          #image-ref: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
-
-      #image-ref: ${{ env.env_var }}:lastest,${{ env.env_var }}:${{ steps.versioning.outputs.version }}
+          image-ref: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
           format: 'table'
           exit-code: "0"
           ignore-unfixed: true
@@ -106,11 +100,7 @@ jobs:
       ## Command to push docker image to registry/repo
       - name: Push docker image to registry/repo post scanning
         run: |
-          docker push eproject/DevSecOps:${{ steps.versioning.outputs.version }}
-#         run: |
-#           docker push ${{ secrets.PRIVATE }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
-
-      #docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
+           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
 
       ## Begin k8s suply chain security configuration by signing docker image digitally with COSIGN. Other tools
       ## can be used as well such as Notary Server
@@ -121,24 +111,16 @@ jobs:
       - name: Sign image with COSIGN_PRIVATE_KEY
         run: |
           export COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
-          export TAGS=eproject/DevSecOps:${{ steps.versioning.outputs.version }}
+          export TAGS=${{ secrets.DOCKER_HUB_USERNAME  }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
           cosign sign --key env://COSIGN_PRIVATE_KEY ${TAGS} -y
-#         run: |
-#           export COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
-#           export TAGS=${{ secrets.PRIVATE }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
-#           cosign sign --key env://COSIGN_PRIVATE_KEY ${TAGS} -y
-       #export TAGS=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }} #Replace line 199 with this if pushing to public repo
+
       ## verify signature on image with COSIGN_PUBLIC_KEY
       - name: Verify image signature
         run: |
           export COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
-          export TAGS=eproject/DevSecOps:${{ steps.versioning.outputs.version }}
+          export TAGS=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
           cosign verify --key env://COSIGN_PUBLIC_KEY ${TAGS}
-#         run: |
-#           export COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
-#           export TAGS=${{ secrets.PRIVATE }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
-#           cosign verify --key env://COSIGN_PUBLIC_KEY ${TAGS}
-      ## export TAGS=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }} #Replace line 126 with this if pushing to public repo
+     
       ## create a release in github
       - name: Create github release
         uses: actions/create-release@v1
