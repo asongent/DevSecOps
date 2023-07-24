@@ -102,7 +102,9 @@ jobs:
       ## Command to push docker image to registry/repo
       - name: Push docker image to registry/repo post scanning
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
+          docker push ${{ secrets.PROJECT }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
+
+      #docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
 
       ## Begin k8s suply chain security configuration by signing docker image digitally with COSIGN. Other tools
       ## can be used as well such as Notary Server
