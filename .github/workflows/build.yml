@@ -46,7 +46,6 @@ jobs:
   
 
       ## Evaluate Dockerfile for poper set-up
-      
       - name: docker file linting
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -65,6 +64,7 @@ jobs:
           minor_pattern: "fix:"
           short_tags: "chore:"
           format: "DevSecOps-v${major}.${minor}.${patch}-${increment}" ## you can add the prefix to your image name as image_name-${increment}
+      
       ## BUILD
       ## build and tage docker image action
       - name: Build and tage docker image
