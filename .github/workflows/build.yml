@@ -27,6 +27,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   #       - name: SonarQube Scan
 #         uses: kitabisa/sonarqube-action@v1.2.0
 #         with:
