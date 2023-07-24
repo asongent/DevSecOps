@@ -21,13 +21,13 @@ jobs:
         with:
           fetch-depth: 0
           
-        ##DAST
-      - name: SonarQube Scan
-        uses: kitabisa/sonarqube-action@v1.2.0
-        with:
-          host: ${{ secrets.SONARQUBE_HOST }}
-          login: ${{ secrets.SONARQUBE_TOKEN }}
-          projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
+#         ##DAST
+#       - name: SonarQube Scan
+#         uses: kitabisa/sonarqube-action@v1.2.0
+#         with:
+#           host: ${{ secrets.SONARQUBE_HOST }}
+#           login: ${{ secrets.SONARQUBE_TOKEN }}
+#           projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
 
         ## Set up qulity Gate
       # - name: SonarQube Quality Gate check
