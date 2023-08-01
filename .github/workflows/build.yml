@@ -44,17 +44,17 @@ jobs:
           fetch-depth: 0
           
         ##DAST
-#       - name: SonarQube Scan
-#         uses: sonarsource/sonarqube-scan-action@master
-#         env:
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  #       - name: SonarQube Scan
-#         uses: kitabisa/sonarqube-action@v1.2.0
-#         with:
-#           host: ${{ secrets.SONARQUBE_HOST }}
-#           login: ${{ secrets.SONARQUBE_TOKEN }}
-#           projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: SonarQube Scan
+        uses: kitabisa/sonarqube-action@v1.2.0
+        with:
+          host: ${{ secrets.SONARQUBE_HOST }}
+          login: ${{ secrets.SONARQUBE_TOKEN }}
+          projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
 
 #         ## Set up qulity Gate
 #       # - name: SonarQube Quality Gate check
@@ -129,7 +129,7 @@ jobs:
         run: |
            docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
 
-      ## Begin k8s suply chain security configuration by signing docker image digitally with COSIGN. Other tools
+      ## Begin k8s supply chain security configuration by signing docker image digitally with COSIGN. Other tools
       ## can be used as well such as Notary Server
       - name: Install Cosign
         uses: sigstore/cosign-installer@main
@@ -141,19 +141,19 @@ jobs:
           export TAGS=${{ secrets.DOCKER_HUB_USERNAME  }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
           cosign sign --key env://COSIGN_PRIVATE_KEY ${TAGS} -y
 
-#       ## verify signature on image with COSIGN_PUBLIC_KEY
-#       - name: Verify image signature
-#         run: |
-#           export COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
-#           export TAGS=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
-#           cosign verify --key env://COSIGN_PUBLIC_KEY ${TAGS}
+      ## verify signature on image with COSIGN_PUBLIC_KEY
+      - name: Verify image signature
+        run: |
+          export COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
+          export TAGS=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
+          cosign verify --key env://COSIGN_PUBLIC_KEY ${TAGS}
      
-#       ## create a release in github
-#       - name: Create github release
-#         uses: actions/create-release@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-#         with:
-#           tag_name: ${{ steps.versioning.outputs.version }}
-#           release_name: ${{ steps.versioning.outputs.version }}
-#           prerelease: true
+      ## create a release in github
+      - name: Create github release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          tag_name: ${{ steps.versioning.outputs.version }}
+          release_name: ${{ steps.versioning.outputs.version }}
+          prerelease: true
