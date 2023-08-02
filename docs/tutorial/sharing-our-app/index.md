@@ -72,7 +72,7 @@ new instance that has never seen this container image! To do this, we will use P
 1. In the terminal, start your freshly pushed app.
 
     ```bash
-    docker run -dp 3000:3000 YOUR-USER-NAME/getting-started
+    docker run -dp 3000:3000 YOUR-USER-NAME/getting-started #amazing
     ```
 
     You should see the image get pulled down and eventually start up!
