@@ -68,9 +68,10 @@ jobs:
           image-ref: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.APP_NAME }}:${{ steps.versioning.outputs.version }}
           format: 'table'
           exit-code: "0"
+          scan-type: 'image'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: ''
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
 
       ## authenticate to Container Registry
