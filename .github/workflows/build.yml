@@ -1,24 +1,4 @@
 
-# name: Build
-
-# on:
-#   push:
-#     branches:
-#       - master
-
-
-# jobs:
-#   build:
-#     name: Build
-#     runs-on: self-hosted #ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-#       - uses: sonarsource/sonarqube-scan-action@master
-#         env:
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
 name: DevSecOps Is The Way To Go
 on:
@@ -49,28 +29,17 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#       - name: SonarQube Scan
-#         uses: kitabisa/sonarqube-action@v1.2.0
-#         with:
-#           host: ${{ secrets.SONARQUBE_HOST }}
-#           login: ${{ secrets.SONARQUBE_TOKEN }}
-#           projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
 
-#         ## Set up qulity Gate
-#       # - name: SonarQube Quality Gate check
-#       #   id: sonarqube-quality-gate-check
-#       #   uses: sonarsource/sonarqube-quality-gate-action@master
-#       #   # Force to fail step after specific time.
-#       #   timeout-minutes: 5
-#       #   env:
-#       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#       #    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
-  
-#       # # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
-#       # - name: "Example show SonarQube Quality Gate Status value"
-#       #   run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
-  
+   ## Set up qulity Gate
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
 
       ## Evaluate Dockerfile for poper set-up
       - name: docker file linting
