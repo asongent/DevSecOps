@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: DevSecOps Best Practice
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     env:
       #env_var: ${{ vars.IMG_NAME }}
       env_var: ${{ secrets.DOCKER_HUB_USERNAME }}
