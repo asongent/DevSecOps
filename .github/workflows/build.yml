@@ -44,7 +44,7 @@ jobs:
 #           login: ${{ secrets.SONARQUBE_TOKEN }}
 #           projectKey:  ${{ secrets.SONAR_PROJECT_KEY }} 
 
-        #### Set up qulity Gate
+        ## Set up qulity Gate
       # - name: SonarQube Quality Gate check
       #   id: sonarqube-quality-gate-check
       #   uses: sonarsource/sonarqube-quality-gate-action@master
