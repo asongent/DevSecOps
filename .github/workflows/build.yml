@@ -30,10 +30,11 @@ jobs:
 
       - name: Check SonarQube Quality Gate
         env:
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          status=$(curl -s -u $SONAR_TOKEN: ${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=DevSecOps | jq -r '.projectStatus.status')
-          if [ "$status" != "OK" ]; then
+          curl -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=DevSecOps" | jq '.projectStatus.status' | grep -q "PASSED"
+          if [ $? -ne 0 ]; then
             echo "SonarQube Quality Gate check failed"
             exit 1
           fi
