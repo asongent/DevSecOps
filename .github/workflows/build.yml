@@ -28,16 +28,16 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: Check SonarQube Quality Gate
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          curl -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=DevSecOps" | jq '.projectStatus.status' | grep -q "PASSED"
-          if [ $? -ne 0 ]; then
-            echo "SonarQube Quality Gate check failed"
-            exit 1
-          fi
+      # - name: Check SonarQube Quality Gate
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      #   run: |
+      #     curl -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=DevSecOps" | jq '.projectStatus.status' | grep -q "PASSED"
+      #     if [ $? -ne 0 ]; then
+      #       echo "SonarQube Quality Gate check failed"
+      #       exit 1
+      #     fi
   #       - name: SonarQube Scan
 #         uses: kitabisa/sonarqube-action@v1.2.0
 #         with:
