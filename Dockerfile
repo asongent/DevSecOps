@@ -1,9 +1,12 @@
 # Install the base requirements for the app.
 # This stage is to support development.
 #FROM --platform=$BUILDPLATFORM python:alpine AS base
-FROM python:alpine AS base
+#FROM python:alpine AS base deprecated
+FROM python:3.12-alpine AS base
 WORKDIR /app
 COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN apk add --no-cache build-base python3-dev
 RUN pip install -r requirements.txt
 
 #FROM --platform=$BUILDPLATFORM node:18-alpine AS app-base
